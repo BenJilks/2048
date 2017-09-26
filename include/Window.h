@@ -13,7 +13,8 @@ typedef struct Font
 void WM_Open(const char* title, int width, int height);
 int WM_ShouldClose();
 void WM_Update();
-void WM_DrawRect(Vec2f start, Vec2f end, Vec3f colour);
+void WM_StartContainer(Vec2f point);
+void WM_DrawRect(Vec2i start, Vec2i size, Vec3f colour);
 //void WM_DrawText(const char* msg, Vec2f position, Font* font) {}
 void WM_Close();
 

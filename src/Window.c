@@ -23,7 +23,7 @@ void WM_Open(const char* name, int w, int h)
 	SDL_Init(SDL_INIT_VIDEO);
 	window = SDL_CreateWindow(name, 
 		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
-		width, height, SDL_WINDOW_SHOWN);
+		width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 }
 
@@ -74,6 +74,7 @@ void WM_Update()
 	SDL_RenderPresent(renderer);
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);
+	SDL_GetWindowSize(window, &width, &height);
 }
 
 void WM_Close()

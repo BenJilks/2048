@@ -59,7 +59,7 @@ void DrawTile(int index, int value)
 		char numberStr[80];
 		sprintf(numberStr, "%i", (int)pow(2, value));
 		Vec2i textPosition = {x + (tileWidth / 2.0f), y + (tileHeight / 2.0f)};
-		WM_DrawText(numberStr, textPosition, "Testing.ttf", 60, 
+		WM_DrawText(numberStr, textPosition, "Testing.ttf", 46, 
 			value <= 2 ? FirstNumber : White);
 	}
 }

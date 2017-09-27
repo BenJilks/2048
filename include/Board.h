@@ -13,5 +13,11 @@ typedef struct Board
 Board Bd_NewBoard();
 void Bd_DrawBoard(Board board);
 
+#define DIR_UP    0
+#define DIR_DOWN  1
+#define DIR_LEFT  2
+#define DIR_RIGHT 3
+void Bd_Move(Board* board, int dir);
+
 #endif //BOARD_H
 

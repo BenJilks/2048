@@ -18,6 +18,10 @@ int cacheSize;
 /* Container data */
 Vec2i containerStart;
 
+/* Input data */
+int keysDown[4];
+static int keyMap[] = {SDLK_a, SDLK_d, SDLK_w, SDLK_s};
+
 TTF_Font* WM_OpenFont(const char* name, int size)
 {
 	return TTF_OpenFont(name, size);
@@ -106,15 +110,34 @@ void WM_DrawText(const char* msg, Vec2i position, const char* fontName, int size
 	SDL_DestroyTexture(texture);
 }
 
+int FindKeyIndex(int value)
+{
+	int i, size = sizeof(keyMap)/sizeof(keyMap[0]);
+	for (i = 0; i < size; i++)
+		if (keyMap[i] == value)
+			return i;
+	return -1;
+}
+
 void WM_Update()
 {
 	SDL_Event event;
 	while (SDL_PollEvent(&event))
 	{
+		int keyCode = event.key.keysym.sym;
+		int keyIndex = FindKeyIndex(keyCode);
 		switch(event.type)
 		{
 			case SDL_QUIT:
 				shouldClose = 1;
+				break;
+			case SDL_KEYDOWN:
+				if (keyIndex != -1)
+					keysDown[keyIndex] = 1;
+				break;
+			case SDL_KEYUP:
+				if (keyIndex != -1)
+					keysDown[keyIndex] = 0;
 				break;
 		}
 	}
@@ -123,6 +146,11 @@ void WM_Update()
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);
 	SDL_GetWindowSize(window, &width, &height);
+}
+
+int WM_IsKeyDown(int key)
+{
+	return keysDown[key];
 }
 
 void WM_Close()

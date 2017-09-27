@@ -13,5 +13,12 @@ void WM_DrawText(const char* msg, Vec2i position, const char* fontName, int size
 
 void WM_Close();
 
+/* Input */
+#define KEY_LEFT  0
+#define KEY_RIGHT 1
+#define KEY_UP    2
+#define KEY_DOWN  3
+int WM_IsKeyDown(int key);
+
 #endif //WINDOW_H
 

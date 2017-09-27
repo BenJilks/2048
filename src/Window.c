@@ -93,7 +93,7 @@ void WM_DrawText(const char* msg, Vec2i position, const char* fontName, int size
 
 	TTF_Font* font = LoadFont(fontName, size);
 	SDL_Color textColour = {rgb.x, rgb.y, rgb.z};
-	SDL_Surface* surface = TTF_RenderText_Solid(font, msg, textColour);
+	SDL_Surface* surface = TTF_RenderText_Blended(font, msg, textColour);
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
 	SDL_FreeSurface(surface);
 	

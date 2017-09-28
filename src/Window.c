@@ -135,10 +135,6 @@ void WM_Update()
 				if (keyIndex != -1)
 					keysDown[keyIndex] = 1;
 				break;
-			case SDL_KEYUP:
-				if (keyIndex != -1)
-					keysDown[keyIndex] = 0;
-				break;
 		}
 	}
 	
@@ -146,6 +142,13 @@ void WM_Update()
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);
 	SDL_GetWindowSize(window, &width, &height);
+}
+
+void WM_ClearInputBuffer()
+{
+	int i, size = sizeof(keysDown)/sizeof(keysDown[0]);
+	for (i = 0; i < size; i++)
+		keysDown[i] = 0;
 }
 
 int WM_IsKeyDown(int key)

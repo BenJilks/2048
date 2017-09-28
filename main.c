@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <sys/time.h>
 #include "Window.h"
 #include "Board.h"
 
@@ -14,7 +15,7 @@ void TestKey(Board* board, int key, int dir, int* cooldown)
 int main()
 {
 	WM_Open("2048", 800, 600);
-	
+
 	int cooldown = 0;
 	Board board = Bd_NewBoard();
 	while (!WM_ShouldClose())
@@ -28,6 +29,7 @@ int main()
 		{
 			cooldown = 0;
 		}
+		WM_ClearInputBuffer();
 		
 		Bd_DrawBoard(board);
 		WM_Update();

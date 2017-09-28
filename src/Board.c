@@ -21,13 +21,14 @@ Board Bd_NewBoard()
 	memset(board.tiles, 0, SIZE * sizeof(int));
 	
 	srand(time(0));
-	for (i = 0; i < SIZE; i++)
+	int placeCount = 0;
+	while (placeCount < 2)
 	{
-		if (rand() % 2 == 0)
+		int pos = rand() % SIZE;
+		if (board.tiles[pos] == 0)
 		{
-			board.tiles[i] = 1;
-			if (rand() % 4 == 0)
-				board.tiles[i] = 2;
+			board.tiles[pos] = 1;
+			placeCount++;
 		}
 	}
 	return board;
@@ -76,8 +77,9 @@ void Bd_DrawBoard(Board board)
 #define IN_BOUNDS(pos) pos.x >= 0 && pos.x < ROWS && pos.y >= 0 && pos.y < COLUMNS
 #define STEP(pos, step) pos.x += step.x; pos.y += step.y;
 #define POS_TO_INDEX(pos) pos.y * ROWS + pos.x
-void Scan(Board* board, Vec2i start, Vec2i dir)
+int Scan(Board* board, Vec2i start, Vec2i dir)
 {
+	int movedFlag = 0;
 	Vec2i pos = start;
 	while (IN_BOUNDS(pos))
 	{
@@ -103,14 +105,19 @@ void Scan(Board* board, Vec2i start, Vec2i dir)
 					break;
 				}
 			}
-			
+
 			STEP(samplePos, dir);
 			int newIndex = POS_TO_INDEX(samplePos);
-			board->tiles[index] = 0;
-			board->tiles[newIndex] = resultValue;
+			if (newIndex != index)
+			{
+				board->tiles[index] = 0;
+				board->tiles[newIndex] = resultValue;
+				movedFlag = 1;
+			}
 		}
 		STEP(pos, dir);
 	}
+	return movedFlag;
 }
 
 static Vec2i startPos[]   = {{0, 0}, {0, 3},  {0, 0},  {3, 0} };
@@ -118,23 +125,29 @@ static Vec2i directions[] = {{0, 1}, {0, -1}, {1, 0},  {-1, 0}};
 static Vec2i stepDirs[]   = {{1, 0}, {1, 0},  {0, 1},  {0, 1} };
 void Bd_Move(Board* board, int dir)
 {
-	int preTiles[SIZE];
-	memcpy(preTiles, board->tiles, sizeof(int) * SIZE);
-
+	int movedFlag = 0;
 	Vec2i start = startPos[dir];
 	Vec2i scanStep = directions[dir];
 	Vec2i step = stepDirs[dir];
 	while(IN_BOUNDS(start))
 	{
-		Scan(board, start, scanStep);
+		if (Scan(board, start, scanStep))
+			movedFlag = 1;
 		STEP(start, step);
 	}
-	
-	int i;
-	for (i = 0; i < SIZE; i++)
+
+	if (movedFlag == 1)
 	{
-		if (preTiles[i] != 0 && board->tiles[i] == 0 && rand() % 4 == 0)
-			board->tiles[i] = 1;
+		long long hasPlaced = 0;
+		while (!hasPlaced)
+		{
+			int pos = rand() % SIZE;
+			if (board->tiles[pos] == 0)
+			{
+				board->tiles[pos] = 1;
+				hasPlaced = 1;
+			}
+		}
 	}
 }
 

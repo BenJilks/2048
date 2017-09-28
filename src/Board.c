@@ -41,6 +41,7 @@ void DrawBackground()
 	WM_DrawRect(start, size, DarkGrey);
 }
 
+static int numbers = {1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048};
 void DrawTile(int index, int value)
 {
 	/* Draw box */
@@ -58,7 +59,7 @@ void DrawTile(int index, int value)
 	{
 		/* Draw number */
 		char numberStr[80];
-		sprintf(numberStr, "%i", (int)pow(2, value));
+		sprintf(numberStr, "%i", value < 11 ? numbers[value] : (int)pow(2, value));
 		Vec2i textPosition = {x + (tileWidth / 2.0f), y + (tileHeight / 2.0f)};
 		WM_DrawText(numberStr, textPosition, "Testing.ttf", 46, 
 			value <= 2 ? FirstNumber : White);
@@ -138,8 +139,8 @@ void Bd_Move(Board* board, int dir)
 
 	if (movedFlag == 1)
 	{
-		long long hasPlaced = 0;
-		while (!hasPlaced)
+		int hasPlaced = 0, tryCount = 0;
+		while (!hasPlaced && tryCount < 100)
 		{
 			int pos = rand() % SIZE;
 			if (board->tiles[pos] == 0)
@@ -147,6 +148,7 @@ void Bd_Move(Board* board, int dir)
 				board->tiles[pos] = 1;
 				hasPlaced = 1;
 			}
+			tryCount++;
 		}
 	}
 }
